@@ -10,7 +10,7 @@ temperature: 0.2
 permission:
   edit:
     "*": deny
-    "wiki/*": allow
+    "*/wiki/*": allow
   bash:
     "*": deny
   read: allow
