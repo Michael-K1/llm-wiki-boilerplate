@@ -61,7 +61,7 @@ You have the **Task tool** and explicit permission to invoke these subagents:
 ### Delegation prompt examples
 
 **Ingest delegation:**
-> "Read the raw source file `raw/example.pdf`. The user wants emphasis on [topics]. Create or update wiki pages following the templates in `templates/`. Load the `wiki-page-formats` skill first. Update `wiki/index.md` and append to `wiki/log.md`. Report all files created and modified."
+> "Read the raw source file `raw/example.pdf`. The user wants emphasis on [topics]. Create or update wiki pages following the templates in `.templates/`. Load the `wiki-page-formats` skill first. Update `wiki/index.md` and append to `wiki/log.md`. Report all files created and modified."
 
 **Query delegation:**
 > "Answer this question using the wiki: '[user's question]'. Read `wiki/index.md` first to find relevant pages. Synthesize an answer with citations to wiki pages and raw sources. Recommend whether the answer is worth filing as a new wiki page."

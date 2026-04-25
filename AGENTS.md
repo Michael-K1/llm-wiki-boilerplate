@@ -13,7 +13,7 @@ Read `purpose.md` for the scope, goals, and domain of this vault.
 - `wiki/` — LLM-maintained markdown pages. All pages created and updated by wiki-ingest agent only.
 - `wiki/index.md` — table of contents for the entire wiki. Updated on every ingest operation.
 - `wiki/log.md` — append-only operation log. Appended on every operation.
-- `templates/` — page type templates. Read-only reference for agents when creating pages.
+- `.templates/` — page type templates. Read-only reference for agents when creating pages.
 
 ## Citation Rules
 
@@ -65,7 +65,7 @@ Append-only chronological record. Each entry formatted as:
 
 ## Page Format
 
-Every wiki page MUST include YAML frontmatter and follow the structure defined in `templates/`. At minimum:
+Every wiki page MUST include YAML frontmatter and follow the structure defined in `.templates/`. At minimum:
 
 - `type` field in frontmatter (source-summary, entity, concept, comparison, contradiction, question-answer)
 - `title` field matching the H1 heading
@@ -79,6 +79,6 @@ Load the `wiki-page-formats` skill for detailed template reference.
 
 - NEVER modify anything in the `raw/` folder
 - ALWAYS update `wiki/index.md` and `wiki/log.md` after any wiki changes
-- ALWAYS follow the appropriate template from `templates/` when creating pages
+- ALWAYS follow the appropriate template from `.templates/` when creating pages
 - ALWAYS include citations for factual claims
 - When uncertain about how to categorize content, default to a concept page

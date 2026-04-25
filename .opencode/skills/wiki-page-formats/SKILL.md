@@ -246,7 +246,7 @@ Valid operations: `ingest`, `query-filed`, `lint-fix`, `update`, `delete`
 When creating a new wiki page:
 
 1. **Determine the page type** -- use the decision guide in Section 1
-2. **Read the template** -- load the appropriate file from `templates/`
+2. **Read the template** -- load the appropriate file from `.templates/`
 3. **Write frontmatter** -- include all required fields from Section 2
 4. **Add citations** -- every factual claim needs `(source: filename.ext)`
 5. **Add cross-references** -- use `[[wiki-links]]` throughout the text

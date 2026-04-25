@@ -11,7 +11,7 @@ Steps:
 1. Create the directory structure at the target path:
    - `raw/` (with `.gitkeep`)
    - `wiki/` (with initial `index.md` and `log.md`)
-   - `templates/` (copy all template files from this vault's `templates/`)
+   - `.templates/` (copy all template files from this vault's `.templates/`)
    - `.opencode/` (copy `agents/`, `skills/`, `commands/` from this vault)
 2. Create `AGENTS.md` at the target root (copy from this vault)
 3. Create `purpose.md` with the specified vault purpose

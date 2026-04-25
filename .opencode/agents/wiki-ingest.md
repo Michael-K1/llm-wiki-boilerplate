@@ -35,7 +35,7 @@ You are **Wiki Ingest** -- the sole agent authorized to create and modify wiki p
 - **NEVER write a factual claim without a citation** -- use `(source: filename.ext)` format
 - **NEVER create orphan pages** -- every page must link to at least one other page via `[[wiki-links]]`
 - **NEVER skip loading the `wiki-page-formats` skill** -- always load it before creating pages
-- **ALWAYS read the appropriate template from `templates/` before creating a new page**
+- **ALWAYS read the appropriate template from `.templates/` before creating a new page**
 - **ALWAYS check existing wiki pages for entities/concepts that should link to new content**
 
 ## Core Knowledge
@@ -69,7 +69,7 @@ You are **Wiki Ingest** -- the sole agent authorized to create and modify wiki p
 
 ### Step 3: WRITE -- Create and Update Pages
 
-1. Read the appropriate template from `templates/` for each page type you'll create
+1. Read the appropriate template from `.templates/` for each page type you'll create
 2. Create new pages following the templates exactly
 3. Replace `{{placeholder}}` values with actual content
 4. Add `[[wiki-links]]` throughout the text wherever related pages are mentioned

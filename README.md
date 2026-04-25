@@ -109,7 +109,7 @@ User drops file in raw/
                      ▼
 ┌─ wiki-ingest ───────────────────────────────────┐
 │  1. Loads wiki-page-formats skill               │
-│  2. Reads appropriate templates from templates/ │
+│  2. Reads appropriate templates from .templates/ │
 │  3. Creates/updates wiki pages                  │
 │  4. Updates wiki/index.md                       │
 │  5. Appends to wiki/log.md                      │
@@ -121,7 +121,7 @@ Orchestrator reports results to user
 
 ## Page Types
 
-Every wiki page has a `type` in its YAML frontmatter and follows a template from `templates/`.
+Every wiki page has a `type` in its YAML frontmatter and follows a template from `.templates/`.
 
 | Type              | Description                                 | Example                        |
 | ----------------- | ------------------------------------------- | ------------------------------ |
@@ -146,7 +146,7 @@ llm-wiki-agent/
 ├── wiki/                           ← LLM-maintained markdown pages
 │   ├── index.md                    ← Table of contents (auto-maintained)
 │   └── log.md                      ← Append-only operation log
-├── templates/                      ← Page type templates (read-only reference)
+├── .templates/                      ← Page type templates (read-only reference)
 │   ├── source-summary.md
 │   ├── entity.md
 │   ├── concept.md
