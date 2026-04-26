@@ -7,6 +7,7 @@ sources:
 created: "{{YYYY-MM-DD}}"
 updated: "{{YYYY-MM-DD}}"
 tags: [concept]
+cssclass: wiki-concept
 ---
 
 # {{concept-name}}

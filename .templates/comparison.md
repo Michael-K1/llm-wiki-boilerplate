@@ -7,6 +7,7 @@ sources:
 created: "{{YYYY-MM-DD}}"
 updated: "{{YYYY-MM-DD}}"
 tags: [comparison]
+cssclass: wiki-comparison
 ---
 
 # {{subject-a}} vs {{subject-b}}

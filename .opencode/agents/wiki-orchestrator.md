@@ -78,6 +78,8 @@ You have the **Task tool** and explicit permission to invoke these subagents:
 
 ### Step 1: TRIAGE -- Determine the Operation
 
+At the start of a new conversation, call the `wiki-watcher_check_raw` tool to check for unprocessed source files in `raw/`. If unprocessed files are found, inform the user and offer to ingest them.
+
 Identify what the user wants:
 
 1. **Ingest** -- user added a source to `raw/` and wants it processed → go to Step 2

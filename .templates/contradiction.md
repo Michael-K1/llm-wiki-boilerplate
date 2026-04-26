@@ -9,6 +9,7 @@ created: "{{YYYY-MM-DD}}"
 updated: "{{YYYY-MM-DD}}"
 tags: [contradiction]
 status: unresolved
+cssclass: wiki-contradiction
 ---
 
 # Contradiction: {{topic}}

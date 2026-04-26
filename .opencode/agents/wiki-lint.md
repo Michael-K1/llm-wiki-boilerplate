@@ -59,6 +59,7 @@ Perform ALL of the following checks:
 7. **Missing citations** -- factual claims without `(source: filename.ext)` attribution
 8. **Index drift** -- pages that exist in `wiki/` but aren't listed in `wiki/index.md`, or index entries pointing to non-existent pages
 9. **Coverage gaps** -- important entities or concepts mentioned frequently but lacking their own dedicated page
+10. **Citation link validation** -- `(source: filename.ext)` references that point to files that don't exist in `raw/`
 
 ## Workflow
 
@@ -78,6 +79,7 @@ Perform ALL of the following checks:
    - Citations `(source: filename.ext)`
    - Factual claims without citations
    - Section headings (for template compliance)
+   - Citation targets (extract filenames from `(source: filename.ext)` patterns)
 
 ### Step 3: ANALYZE -- Cross-Reference
 
@@ -87,6 +89,7 @@ Perform ALL of the following checks:
 4. Identify index drift (mismatches between index.md entries and actual files)
 5. Check for contradictory claims across pages
 6. Check for entities/concepts mentioned but not linked
+7. Verify citation targets exist in `raw/` (use `glob` with `raw/*` to list actual files, compare against extracted citation filenames)
 
 ### Step 4: REPORT -- Structure Findings
 
@@ -136,7 +139,7 @@ Minor improvements:
 
 | Severity | Criteria | Examples |
 |----------|----------|---------|
-| **CRITICAL** | Factual reliability compromised | Contradictions between pages, factual claims without any citation, index lists a page that doesn't exist |
+| **CRITICAL** | Factual reliability compromised | Contradictions between pages, factual claims without any citation, index lists a page that doesn't exist, citation references a source file not in `raw/` |
 | **MODERATE** | Wiki quality or navigability reduced | Orphan pages, broken links, missing frontmatter fields, pages not following template |
 | **LOW** | Opportunities for improvement | Mentioned concepts without their own page, entities not linked in prose, minor formatting issues |
 
