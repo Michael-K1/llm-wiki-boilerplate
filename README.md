@@ -10,6 +10,8 @@ Inspired by [Andrej Karpathy's LLM Wiki pattern](https://x.com/karpathy/status/1
 
 You drop source documents (PDFs, articles, notes) into `raw/`. The wiki agents read them, discuss key takeaways with you, then create structured, interlinked wiki pages with full citations back to the sources. Over time, your wiki compounds — entities cross-reference each other, contradictions are tracked, and you can query the whole knowledge base in natural language.
 
+You can also use the **research workflow** to find new sources online — the wiki-researcher agent searches the web, evaluates candidates against your vault's scope, and stages them for your review before ingest.
+
 ```
                          ┌─────────────────────┐
                          │   wiki-orchestrator  │
@@ -19,25 +21,25 @@ You drop source documents (PDFs, articles, notes) into `raw/`. The wiki agents r
                          │  • Discusses sources  │
                          │  • Presents results  │
                          │  • NEVER writes wiki │
-                         └──────┬───┬───┬───────┘
-                                │   │   │
-                 ┌──────────────┘   │   └──────────────┐
-                 ▼                  ▼                   ▼
-      ┌──────────────────┐ ┌───────────────┐ ┌─────────────────┐
-      │   wiki-ingest    │ │  wiki-query   │ │   wiki-lint     │
-      │   (subagent)     │ │  (subagent)   │ │   (subagent)    │
-      │                  │ │               │ │                  │
-      │ • Reads raw/     │ │ • Searches    │ │ • Checks health │
-      │ • Creates pages  │ │   wiki pages  │ │ • Finds orphans │
-      │ • Updates index  │ │ • Synthesizes │ │ • Spots broken  │
-      │ • Maintains log  │ │   answers     │ │   links         │
-      │                  │ │ • Cites       │ │ • Verifies       │
-      │ SOLE WIKI WRITER │ │   sources     │ │   citations     │
-      └──────────────────┘ └───────────────┘ └─────────────────┘
-         writes wiki/        read-only           read-only
+                         └──┬────┬────┬────┬───┘
+                            │    │    │    │
+             ┌──────────────┘    │    │    └──────────────┐
+             ▼                   ▼    ▼                   ▼
+  ┌──────────────────┐ ┌─────────────────┐ ┌───────────────┐ ┌─────────────────┐
+  │ wiki-researcher  │ │   wiki-ingest   │ │  wiki-query   │ │   wiki-lint     │
+  │   (subagent)     │ │   (subagent)    │ │  (subagent)   │ │   (subagent)    │
+  │                  │ │                 │ │               │ │                 │
+  │ • Searches web   │ │ • Reads raw/    │ │ • Searches    │ │ • Checks health │
+  │ • Evaluates      │ │ • Creates pages │ │   wiki pages  │ │ • Finds orphans │
+  │   sources        │ │ • Updates index │ │ • Synthesizes │ │ • Spots broken  │
+  │ • Stages         │ │ • Maintains log │ │   answers     │ │   links         │
+  │   candidates     │ │                 │ │ • Cites       │ │ • Verifies      │
+  │                  │ │ SOLE WIKI WRITER│ │   sources     │ │   citations     │
+  └──────────────────┘ └─────────────────┘ └───────────────┘ └─────────────────┘
+    writes candidate/     writes wiki/        read-only           read-only
 ```
 
-**Key design principle: single-writer architecture.** Only `wiki-ingest` writes to `wiki/`. The orchestrator and other agents are read-only. This prevents conflicting edits and keeps permissions clean.
+**Key design principle: single-writer architecture.** Only `wiki-ingest` writes to `wiki/`. The orchestrator and other agents are read-only. `wiki-researcher` writes only to `candidate/`, never to `wiki/` or `raw/`.
 
 ## Quick Start
 
@@ -87,6 +89,7 @@ Switch to the wiki-orchestrator agent (Tab key), then use the commands below.
 | ------------------------------- | ---------------------------------------------- |
 | `/wiki-ingest [filename]`       | Process a raw source document into the wiki    |
 | `/wiki-query [question]`        | Ask a question against the wiki knowledge base |
+| `/wiki-scout [topic]`           | Search the web for relevant sources            |
 | `/wiki-lint`                    | Audit wiki health and report findings          |
 | `/wiki-status`                  | Show wiki statistics and recent activity       |
 | `/wiki-deploy [path] [purpose]` | Scaffold a new vault at a given path           |
@@ -119,6 +122,56 @@ User drops file in raw/
 Orchestrator reports results to user
 ```
 
+## Research Flow
+
+The wiki-researcher agent finds new sources online and stages them for your review.
+
+```
+/wiki-scout find papers on Shinkansen timetable optimization
+        │
+        ▼
+┌─ Orchestrator ──────────────────────────────────┐
+│  Routes to wiki-researcher                      │
+└────────────────────┬────────────────────────────┘
+                     ▼
+┌─ wiki-researcher ───────────────────────────────┐
+│  1. Reads purpose.md and sources.md             │
+│  2. Searches configured sources + web           │
+│  3. Evaluates relevance to vault scope          │
+│  4. Saves summary cards to candidate/           │
+└────────────────────┬────────────────────────────┘
+                     ▼
+┌─ User review ───────────────────────────────────┐
+│  1. Reviews candidates in candidate/            │
+│  2. Moves approved sources to raw/              │
+│  3. Runs /wiki-ingest on approved sources       │
+└─────────────────────────────────────────────────┘
+```
+
+**Three search modes:**
+
+- **Query** — you provide search terms, the agent searches configured sources
+- **Gap analysis** — the agent reads wiki pages, finds thin coverage and open questions, then searches to fill gaps
+- **Contradiction resolution** — the agent reads contradiction pages and searches for authoritative sources to settle disputes
+
+### Configuring Research Sources
+
+Edit `sources.md` to define where the researcher looks. Sources are organized in three priority tiers:
+
+| Tier | Label          | Examples                              |
+| ---- | -------------- | ------------------------------------- |
+| 1    | Authoritative  | Peer-reviewed journals, official docs |
+| 2    | Reliable       | Established publications, textbooks   |
+| 3    | Supplementary  | Blogs, forums, community wikis        |
+
+Each entry follows this format:
+
+```markdown
+- [Source Name](url) — Description | keywords: topic1, topic2
+```
+
+The researcher prioritizes higher-tier sources and includes tier metadata in candidate summary cards.
+
 ## Page Types
 
 Every wiki page has a `type` in its YAML frontmatter and follows a template from `.templates/`.
@@ -141,12 +194,15 @@ llm-wiki-agent/
 ├── AGENTS.md                       ← Framework conventions (injected into all agents)
 ├── purpose.md                      ← Vault scope — the ONLY file you customize
 ├── opencode.json                   ← OpenCode config
+├── sources.md                      ← Research source configuration
 ├── raw/                            ← Immutable source documents (human-curated)
+│   └── .gitkeep
+├── candidate/                      ← Source candidates staged by wiki-researcher
 │   └── .gitkeep
 ├── wiki/                           ← LLM-maintained markdown pages
 │   ├── index.md                    ← Table of contents (auto-maintained)
 │   └── log.md                      ← Append-only operation log
-├── .templates/                      ← Page type templates (read-only reference)
+├── .templates/                     ← Page type templates (read-only reference)
 │   ├── source-summary.md
 │   ├── entity.md
 │   ├── concept.md
@@ -157,6 +213,7 @@ llm-wiki-agent/
     ├── agents/
     │   ├── wiki-orchestrator.md    ← Primary agent (Tab key) — routes to subagents
     │   ├── wiki-ingest.md          ← Subagent — sole wiki writer
+    │   ├── wiki-researcher.md      ← Subagent — web research and source discovery
     │   ├── wiki-query.md           ← Subagent — read-only Q&A
     │   └── wiki-lint.md            ← Subagent — read-only health auditor
     ├── skills/
@@ -164,6 +221,7 @@ llm-wiki-agent/
     │       └── SKILL.md            ← Page format reference skill
     └── commands/
         ├── wiki-ingest.md          ← /wiki-ingest [filename]
+        ├── wiki-scout.md           ← /wiki-scout [topic]
         ├── wiki-query.md           ← /wiki-query [question]
         ├── wiki-lint.md            ← /wiki-lint
         ├── wiki-status.md          ← /wiki-status
@@ -213,7 +271,21 @@ The wiki-ingest agent creates:
 | `jr-pass.md`               | concept        |
 | `shinkansen.md`            | concept        |
 
-**3. Query the wiki:**
+**3. Scout for more sources:**
+
+```
+> /wiki-scout find recent articles on JR Pass pricing changes 2025
+```
+
+> **Found 3 candidates:**
+>
+> - `jr-pass-price-hike-2023.md` — Japan Times article on the October 2023 price increase (Tier 2)
+> - `jrpass-official-faq.md` — JR Group official FAQ with current pricing (Tier 1)
+> - `japan-travel-forum-jr-pass.md` — Reddit discussion comparing JR Pass vs individual tickets (Tier 3)
+>
+> **Candidates saved to `candidate/`.** Review and move approved sources to `raw/`, then run `/wiki-ingest` on them.
+
+**4. Query the wiki:**
 
 ```
 > /wiki-query What's the best way to get from Tokyo to Kyoto?
@@ -223,7 +295,7 @@ The wiki-ingest agent creates:
 >
 > **Would you like me to file this as a wiki page?**
 
-**4. Audit wiki health** after adding several more sources:
+**5. Audit wiki health** after adding several more sources:
 
 ```
 > /wiki-lint
@@ -264,13 +336,40 @@ cd ~/wikis/cooking-notes
 
 Either way, `purpose.md` is the only file you need to edit. Everything else is framework infrastructure.
 
+## Optional: MCP Search Integration
+
+The wiki-researcher uses OpenCode's built-in `webfetch` and `websearch` tools by default. For better search results, you can add an MCP search server like [Brave Search](https://brave.com/search/api/), [Exa](https://exa.ai), or [Tavily](https://tavily.com).
+
+**To keep token usage efficient**, globally disable the MCP tools in `opencode.json` so their descriptions aren't injected into every agent's context, then re-enable them only in the wiki-researcher agent:
+
+1. Add the MCP server to `opencode.json` under `mcpServers`
+2. Disable its tools globally in the `tools` field:
+
+```json
+{
+  "tools": {
+    "mcp_brave-search_brave_web_search": "disabled"
+  }
+}
+```
+
+3. Re-enable in `.opencode/agents/wiki-researcher.md` frontmatter:
+
+```yaml
+tools:
+  mcp_brave-search_brave_web_search: enabled
+```
+
+This way only wiki-researcher pays the token cost for MCP tool descriptions.
+
 ## Design Decisions
 
 - **Single-writer architecture** — only `wiki-ingest` writes to `wiki/`, preventing conflicting edits
 - **Human-in-the-loop ingest** — the orchestrator always discusses sources with you before writing, so you control emphasis and priorities
+- **Human-in-the-loop research** — wiki-researcher stages candidates in `candidate/` for your review; nothing goes into `raw/` or `wiki/` without your approval
 - **Immutable sources** — `raw/` is never modified by agents, preserving your original documents
 - **Citation-first** — every factual claim requires a `(source: filename.ext)` citation; unsourced claims are marked `[needs verification]`
-- **Obsidian-compatible** — `[[wiki-links]]` and YAML frontmatter work natively in Obsidian for browsing outside OpenCode
+- **Obsidian-compatible** — `[[wiki-links]]` and YAML frontmatter work natively in Obsidian; `.templates/` is dot-prefixed so Obsidian ignores template files in search and graph view
 
 ## Credits
 
