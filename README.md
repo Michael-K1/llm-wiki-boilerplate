@@ -342,13 +342,27 @@ The wiki-researcher uses OpenCode's built-in `webfetch` and `websearch` tools by
 
 **To keep token usage efficient**, globally disable the MCP tools in `opencode.json` so their descriptions aren't injected into every agent's context, then re-enable them only in the wiki-researcher agent:
 
-1. Add the MCP server to `opencode.json` under `mcpServers`
-2. Disable its tools globally in the `tools` field:
+1. Add the MCP server to `opencode.json` under `"mcp"`:
+
+```json
+{
+  "mcp": {
+    "brave-search": {
+      "type": "local",
+      "command": ["npx", "-y", "@anthropic/brave-search-mcp"],
+      "enabled": true,
+      "environment": { "BRAVE_API_KEY": "your-key-here" }
+    }
+  }
+}
+```
+
+2. Disable its tools globally in the `"tools"` field (use glob pattern + boolean):
 
 ```json
 {
   "tools": {
-    "mcp_brave-search_brave_web_search": "disabled"
+    "brave-search_*": false
   }
 }
 ```
@@ -357,7 +371,7 @@ The wiki-researcher uses OpenCode's built-in `webfetch` and `websearch` tools by
 
 ```yaml
 tools:
-  mcp_brave-search_brave_web_search: enabled
+  brave-search_*: true
 ```
 
 This way only wiki-researcher pays the token cost for MCP tool descriptions.
