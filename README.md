@@ -195,6 +195,7 @@ llm-wiki-agent/
 ├── purpose.md                      ← Vault scope — the ONLY file you customize
 ├── opencode.json                   ← OpenCode config
 ├── sources.md                      ← Research source configuration
+├── TODO.md                         ← Enhancement roadmap
 ├── raw/                            ← Immutable source documents (human-curated)
 │   └── .gitkeep
 ├── candidate/                      ← Source candidates staged by wiki-researcher
@@ -208,7 +209,8 @@ llm-wiki-agent/
 │   ├── concept.md
 │   ├── comparison.md
 │   ├── contradiction.md
-│   └── question-answer.md
+│   ├── question-answer.md
+│   └── dataview-queries.md          ← Pre-built Dataview queries for Obsidian
 └── .opencode/
     ├── agents/
     │   ├── wiki-orchestrator.md    ← Primary agent (Tab key) — routes to subagents
@@ -219,6 +221,8 @@ llm-wiki-agent/
     ├── skills/
     │   └── wiki-page-formats/
     │       └── SKILL.md            ← Page format reference skill
+    ├── plugins/
+    │   └── wiki-watcher.ts          ← Auto-detect unprocessed files in raw/
     └── commands/
         ├── wiki-ingest.md          ← /wiki-ingest [filename]
         ├── wiki-scout.md           ← /wiki-scout [topic]
@@ -336,6 +340,44 @@ cd ~/wikis/cooking-notes
 
 Either way, `purpose.md` is the only file you need to edit. Everything else is framework infrastructure.
 
+## Obsidian Integration
+
+This wiki is designed for [Obsidian](https://obsidian.md). All pages use `[[wiki-links]]` and YAML frontmatter natively.
+
+### Graph View Styling
+
+Every template includes a `cssclass` field in frontmatter (e.g., `cssclass: wiki-source`, `cssclass: wiki-entity`). Add CSS snippets in Obsidian to color-code page types in the graph view:
+
+```css
+/* Obsidian CSS Snippet — save as .obsidian/snippets/wiki-graph.css */
+.wiki-source  { --graph-color-node: #4CAF50; }  /* green */
+.wiki-entity  { --graph-color-node: #2196F3; }  /* blue */
+.wiki-concept { --graph-color-node: #FF9800; }  /* orange */
+.wiki-comparison    { --graph-color-node: #9C27B0; }  /* purple */
+.wiki-contradiction { --graph-color-node: #F44336; }  /* red */
+.wiki-question      { --graph-color-node: #00BCD4; }  /* teal */
+```
+
+### Dataview Queries
+
+Install the [Dataview](https://github.com/blackfold/obsidian-dataview) community plugin, then copy queries from `.templates/dataview-queries.md` into any note. Included queries:
+
+- All pages by type
+- Recent activity (last 10 updated)
+- All entities, concepts, source summaries
+- Unresolved contradictions
+- Pages missing sources
+- Most-linked pages (requires JS queries enabled)
+- Candidate sources pending review
+
+### Auto-Ingest Watcher
+
+The `wiki-watcher` plugin provides a `check_raw` tool that compares files in `raw/` against `wiki/index.md` to find unprocessed sources. The orchestrator calls this automatically at the start of each conversation. You can also invoke it manually:
+
+```
+> Check for unprocessed files
+```
+
 ## Optional: MCP Search Integration
 
 The wiki-researcher uses OpenCode's built-in `webfetch` and `websearch` tools by default. For better search results, you can add an MCP search server like [Brave Search](https://brave.com/search/api/), [Exa](https://exa.ai), or [Tavily](https://tavily.com).
@@ -384,6 +426,7 @@ This way only wiki-researcher pays the token cost for MCP tool descriptions.
 - **Immutable sources** — `raw/` is never modified by agents, preserving your original documents
 - **Citation-first** — every factual claim requires a `(source: filename.ext)` citation; unsourced claims are marked `[needs verification]`
 - **Obsidian-compatible** — `[[wiki-links]]` and YAML frontmatter work natively in Obsidian; `.templates/` is dot-prefixed so Obsidian ignores template files in search and graph view
+- **Progressive tooling** — the wiki-watcher plugin, Obsidian cssclass styling, and Dataview queries are optional enhancements that layer on top of the core wiki workflow without changing it
 
 ## Credits
 
