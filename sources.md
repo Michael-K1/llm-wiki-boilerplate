@@ -32,3 +32,7 @@ Each entry follows the format:
 <!-- Blogs, forums, community content, secondary sources -->
 <!-- Example: -->
 <!-- - [Hacker News](https://news.ycombinator.com) — Tech community discussion | keywords: tech, startups, programming -->
+
+---
+
+See [[purpose]] for vault scope and [[AGENTS]] for wiki conventions.

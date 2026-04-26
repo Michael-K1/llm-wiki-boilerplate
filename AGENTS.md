@@ -14,7 +14,7 @@ Read [[purpose]] for the scope, goals, and domain of this vault.
 - `wiki/index.md` — table of contents for the entire wiki. Updated on every ingest operation.
 - `wiki/log.md` — append-only operation log. Appended on every operation.
 - `.templates/` — page type templates. Read-only reference for agents when creating pages.
-- `sources.md` — user-configured research sources with priority tiers. Read by wiki-researcher.
+- [[sources]] — user-configured research sources with priority tiers. Read by wiki-researcher.
 - `candidate/` — staging area for source candidates found by wiki-researcher. Review here before moving to `raw/`.
 
 ## Citation Rules
