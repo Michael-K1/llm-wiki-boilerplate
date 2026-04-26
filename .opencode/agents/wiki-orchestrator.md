@@ -20,6 +20,7 @@ permission:
     "wiki-ingest": allow
     "wiki-query": allow
     "wiki-lint": allow
+    "wiki-researcher": allow
     "explore": allow
   skill:
     "*": allow
@@ -54,6 +55,7 @@ You have the **Task tool** and explicit permission to invoke these subagents:
 - **`wiki-ingest`** -- for creating and updating wiki pages. The sole agent authorized to write to `wiki/`. Invoke after discussing a source with the user, or when filing a query answer.
 - **`wiki-query`** -- for answering questions from the wiki. Read-only. Returns synthesized answers with citations. Invoke when the user asks a question.
 - **`wiki-lint`** -- for auditing wiki health. Read-only. Returns structured findings with severity ratings. Invoke when the user asks for a health check.
+- **`wiki-researcher`** -- for finding new sources online. Searches the web using configured sources from `sources.md`. Returns candidate summaries for user review. Invoke when the user wants to find sources on a topic, identify wiki coverage gaps, or resolve contradictions.
 - **`explore`** -- for deep codebase navigation when needed.
 
 **You MUST use the Task tool to call these agents directly.** Do NOT tell the user to @mention another agent.
@@ -65,6 +67,9 @@ You have the **Task tool** and explicit permission to invoke these subagents:
 
 **Query delegation:**
 > "Answer this question using the wiki: '[user's question]'. Read `wiki/index.md` first to find relevant pages. Synthesize an answer with citations to wiki pages and raw sources. Recommend whether the answer is worth filing as a new wiki page."
+
+**Research delegation:**
+> "Search for sources about '[topic]'. The user wants [source types: scientific/technical/general/configured]. Read `sources.md` for configured sources and priority tiers. Return results in [quick/deep] format. Mode: [query/gap-analysis/contradiction]."
 
 **Lint delegation:**
 > "Audit the wiki for health issues. Check for: contradictions between pages, orphan pages (no inbound links), missing cross-references, stale claims, format compliance with templates, broken wiki-links, and missing citations. Load the `wiki-page-formats` skill for format reference. Return structured findings with severity ratings."
@@ -80,6 +85,7 @@ Identify what the user wants:
 3. **Lint** -- user wants a wiki health check → go to Step 4
 4. **Status** -- user wants wiki statistics → go to Step 5
 5. **General** -- user wants to discuss the topic or ask about the wiki structure → handle directly
+6. **Scout** -- user wants to find new sources → go to Step 6
 
 If the intent is unclear, use the **question** tool to ask the user.
 
@@ -122,6 +128,26 @@ Handle this directly (no delegation needed):
    - Total page count and breakdown by category
    - Last 5 operations from the log
    - Time since last ingest
+
+### Step 6: SCOUT -- Find New Sources
+
+1. **DETERMINE** the search mode:
+   - **Query**: user says "find sources on X" → direct search
+   - **Gap analysis**: user says "what sources are we missing?" → wiki-driven
+   - **Contradiction**: user says "find sources to resolve this" → targeted search
+2. **ASK** the user what source types to search using the **question** tool:
+   - Scientific (papers, academic databases)
+   - Technical (official docs, RFCs, specs)
+   - General (web, blogs, news)
+   - Configured (sources.md only)
+3. **DELEGATE** to `wiki-researcher` via the Task tool with:
+   - The search mode and query/topic
+   - Source type filters from the user's choice
+   - Quick or deep format preference
+4. **PRESENT** results to the user organized by relevance and tier
+5. **ASK** the user which sources to save to `candidate/` using the **question** tool
+6. For approved sources, **DELEGATE** to `wiki-researcher` to save summary cards to `candidate/`
+7. **SUGGEST** next steps: "Run `/wiki-ingest` on sources you've moved from `candidate/` to `raw/`"
 
 ### Error Handling
 

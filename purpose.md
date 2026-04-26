@@ -24,3 +24,7 @@ A personal knowledge base for [describe your topic here].
 <!-- Add any domain-specific formatting or terminology conventions -->
 - No additional conventions configured
 - Example: "Use metric units" or "Prefer primary sources over secondary"
+
+---
+
+See [[AGENTS]] for wiki structure, rules, and conventions.

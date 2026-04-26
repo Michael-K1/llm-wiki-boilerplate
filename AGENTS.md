@@ -5,7 +5,7 @@ Based on Andrej Karpathy's LLM Wiki pattern.
 
 ## Purpose
 
-Read `purpose.md` for the scope, goals, and domain of this vault.
+Read [[purpose]] for the scope, goals, and domain of this vault.
 
 ## Folder Structure
 
@@ -14,6 +14,8 @@ Read `purpose.md` for the scope, goals, and domain of this vault.
 - `wiki/index.md` — table of contents for the entire wiki. Updated on every ingest operation.
 - `wiki/log.md` — append-only operation log. Appended on every operation.
 - `.templates/` — page type templates. Read-only reference for agents when creating pages.
+- `sources.md` — user-configured research sources with priority tiers. Read by wiki-researcher.
+- `candidate/` — staging area for source candidates found by wiki-researcher. Review here before moving to `raw/`.
 
 ## Citation Rules
 
@@ -82,3 +84,5 @@ Load the `wiki-page-formats` skill for detailed template reference.
 - ALWAYS follow the appropriate template from `.templates/` when creating pages
 - ALWAYS include citations for factual claims
 - When uncertain about how to categorize content, default to a concept page
+- NEVER modify anything in the `candidate/` folder from wiki agents — only wiki-researcher writes here
+- Review sources in `candidate/` before moving them to `raw/` for ingest
