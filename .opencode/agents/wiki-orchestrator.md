@@ -63,10 +63,10 @@ You have the **Task tool** and explicit permission to invoke these subagents:
 ### Delegation prompt examples
 
 **Ingest delegation:**
-> "Read the raw source file `raw/example.pdf`. The user wants emphasis on [topics]. Create or update wiki pages following the templates in `.templates/`. Load the `wiki-page-formats` skill first. Update `wiki/index.md` and append to `wiki/log.md`. Report all files created and modified."
+> "Read the raw source file `raw/example.pdf`. The user wants emphasis on [topics]. Create or update wiki pages following the templates in `.templates/`. Load the `wiki-page-formats` skill first. Update `wiki-index.md` and append to `wiki-log.md`. Report all files created and modified."
 
 **Query delegation:**
-> "Answer this question using the wiki: '[user's question]'. Read `wiki/index.md` first to find relevant pages. Synthesize an answer with citations to wiki pages and raw sources. Recommend whether the answer is worth filing as a new wiki page."
+> "Answer this question using the wiki: '[user's question]'. Read `wiki-index.md` first to find relevant pages. Synthesize an answer with citations to wiki pages and raw sources. Recommend whether the answer is worth filing as a new wiki page."
 
 **Research delegation:**
 > "Search for sources about '[topic]'. The user wants [source types: scientific/technical/general/configured]. Read `sources.md` for configured sources and priority tiers. Return results in [quick/deep] format. Mode: [query/gap-analysis/contradiction]."
@@ -111,7 +111,7 @@ If the intent is unclear, use the **question** tool to ask the user.
 4. If the user wants to file it, **DELEGATE** to `wiki-ingest` with:
    - The synthesized answer content
    - Instruction to create a question-answer page using the template
-   - Instruction to update index.md and log.md
+   - Instruction to update wiki-index.md and wiki-log.md
 
 ### Step 4: LINT -- Audit Wiki Health
 
@@ -124,8 +124,8 @@ If the intent is unclear, use the **question** tool to ask the user.
 
 Handle this directly (no delegation needed):
 
-1. **READ** `wiki/index.md` to count pages by category
-2. **READ** `wiki/log.md` to get recent operations
+1. **READ** `wiki-index.md` to count pages by category
+2. **READ** `wiki-log.md` to get recent operations
 3. **REPORT** to the user:
    - Total page count and breakdown by category
    - Last 5 operations from the log
@@ -156,7 +156,7 @@ Handle this directly (no delegation needed):
 - **Delegation failure**: If a subagent Task fails or returns an error, report the failure to the user with the error details. Ask whether to retry, skip, or take a different approach.
 - **Ambiguous request**: If the user's intent spans multiple operations (e.g., "process this file and check for issues"), break it into sequential steps and confirm the order.
 - **Oversized source**: If a raw source file exceeds readable length, summarize what you can read and note the truncation to the user before delegating.
-- **Empty wiki**: On first ingest, instruct wiki-ingest that `wiki/index.md` may contain only placeholder text and needs full initialization.
+- **Empty wiki**: On first ingest, instruct wiki-ingest that `wiki-index.md` may contain only placeholder text and needs full initialization.
 
 ## Communication Style
 

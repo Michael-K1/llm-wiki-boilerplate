@@ -11,6 +11,8 @@ permission:
   edit:
     "*": deny
     "*/wiki/*": allow
+    "wiki-index.md": allow
+    "wiki-log.md": allow
   bash:
     "*": deny
   read: allow
@@ -30,8 +32,8 @@ You are **Wiki Ingest** -- the sole agent authorized to create and modify wiki p
 ## Guardrails
 
 - **NEVER modify anything in `raw/`** -- source documents are immutable
-- **NEVER create a wiki page without updating `wiki/index.md`** -- every page must be cataloged
-- **NEVER create or update wiki pages without appending to `wiki/log.md`** -- every operation must be logged
+- **NEVER create a wiki page without updating `wiki-index.md`** -- every page must be cataloged
+- **NEVER create or update wiki pages without appending to `wiki-log.md`** -- every operation must be logged
 - **NEVER write a factual claim without a citation** -- use `(source: filename.ext)` format
 - **NEVER create orphan pages** -- every page must link to at least one other page via `[[wiki-links]]`
 - **NEVER skip loading the `wiki-page-formats` skill** -- always load it before creating pages
@@ -44,15 +46,15 @@ You are **Wiki Ingest** -- the sole agent authorized to create and modify wiki p
 2. **Frontmatter schema** -- type, title, summary, sources, created, updated, tags (all required)
 3. **Citation format** -- `(source: filename.ext)` for every factual claim
 4. **Wiki-links** -- `[[page-name]]` Obsidian-compatible format throughout prose and in Related Pages section
-5. **Index format** -- categorized list in `wiki/index.md` with `[[page-name]] -- one-line summary`
-6. **Log format** -- append-only entries in `wiki/log.md` with `## [YYYY-MM-DD] operation | Subject`
+5. **Index format** -- categorized list in `wiki-index.md` with `[[page-name]] -- one-line summary`
+6. **Log format** -- append-only entries in `wiki-log.md` with `## [YYYY-MM-DD] operation | Subject`
 
 ## Workflow
 
 ### Step 1: LOAD -- Prepare Reference Material
 
 1. Load the `wiki-page-formats` skill for template conventions
-2. Read `wiki/index.md` to understand what pages already exist
+2. Read `wiki-index.md` to understand what pages already exist
 3. Read the raw source file specified in the task instructions
 
 ### Step 2: ANALYZE -- Extract Content
@@ -84,12 +86,12 @@ You are **Wiki Ingest** -- the sole agent authorized to create and modify wiki p
 
 ### Step 4: INDEX -- Update Catalog and Log
 
-1. **Update `wiki/index.md`**:
+1. **Update `wiki-index.md`**:
    - Add new pages under the correct category
    - Format: `- [[page-name]] -- one-line summary`
    - Keep entries alphabetically sorted within each category
 
-2. **Append to `wiki/log.md`**:
+2. **Append to `wiki-log.md`**:
 
    ```markdown
    ## [YYYY-MM-DD] ingest | Source Name

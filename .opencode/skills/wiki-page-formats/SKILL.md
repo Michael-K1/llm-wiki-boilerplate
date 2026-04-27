@@ -216,7 +216,7 @@ Additional fields by type:
 
 ## 10. Index and Log Conventions
 
-### index.md format
+### wiki-index.md format
 
 ```markdown
 ## Category Name
@@ -227,7 +227,7 @@ Additional fields by type:
 
 Categories: Sources, Entities, Concepts, Comparisons, Contradictions, Questions
 
-### log.md format
+### wiki-log.md format
 
 ```markdown
 ## [YYYY-MM-DD] operation | Subject
@@ -251,5 +251,5 @@ When creating a new wiki page:
 4. **Add citations** -- every factual claim needs `(source: filename.ext)`
 5. **Add cross-references** -- use `[[wiki-links]]` throughout the text
 6. **Write Related Pages** -- add 2--8 related page links at the bottom
-7. **Update index.md** -- add the new page under the correct category
-8. **Append to log.md** -- record the operation with date and details
+7. **Update wiki-index.md** -- add the new page under the correct category
+8. **Append to wiki-log.md** -- record the operation with date and details

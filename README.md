@@ -114,8 +114,8 @@ User drops file in raw/
 │  1. Loads wiki-page-formats skill               │
 │  2. Reads appropriate templates from .templates/ │
 │  3. Creates/updates wiki pages                  │
-│  4. Updates wiki/index.md                       │
-│  5. Appends to wiki/log.md                      │
+│  4. Updates wiki-index.md                       │
+│  5. Appends to wiki-log.md                      │
 └────────────────────┬────────────────────────────┘
                      │
                      ▼
@@ -196,13 +196,13 @@ llm-wiki-agent/
 ├── opencode.json                   ← OpenCode config
 ├── sources.md                      ← Research source configuration
 ├── TODO.md                         ← Enhancement roadmap
+├── wiki-index.md                       ← Table of contents (auto-maintained, project root)
+├── wiki-log.md                         ← Append-only operation log (project root)
 ├── raw/                            ← Immutable source documents (human-curated)
 │   └── .gitkeep
 ├── candidate/                      ← Source candidates staged by wiki-researcher
 │   └── .gitkeep
 ├── wiki/                           ← LLM-maintained markdown pages
-│   ├── index.md                    ← Table of contents (auto-maintained)
-│   └── log.md                      ← Append-only operation log
 ├── .templates/                     ← Page type templates (read-only reference)
 │   ├── source-summary.md
 │   ├── entity.md
@@ -372,7 +372,7 @@ Install the [Dataview](https://github.com/blackfold/obsidian-dataview) community
 
 ### Auto-Ingest Watcher
 
-The `wiki-watcher` plugin provides a `check_raw` tool that compares files in `raw/` against `wiki/index.md` to find unprocessed sources. The orchestrator calls this automatically at the start of each conversation. You can also invoke it manually:
+The `wiki-watcher` plugin provides a `check_raw` tool that compares files in `raw/` against `wiki-index.md` to find unprocessed sources. The orchestrator calls this automatically at the start of each conversation. You can also invoke it manually:
 
 ```
 > Check for unprocessed files

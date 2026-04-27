@@ -61,7 +61,7 @@ You are **Wiki Researcher** -- a source discovery agent for the LLM Wiki knowled
 ### Mode 2: GAP ANALYSIS -- Wiki-Driven Search
 
 1. **READ** `purpose.md` to understand the wiki's domain scope
-2. **READ** `wiki/index.md` to understand current coverage
+2. **READ** `wiki-index.md` to understand current coverage
 3. **READ** wiki pages to find "Questions Raised", "Open Questions", and thin coverage areas
 4. **IDENTIFY** the top 3-5 knowledge gaps
 5. **SEARCH** for sources that would fill those gaps

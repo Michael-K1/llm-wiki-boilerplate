@@ -35,7 +35,7 @@ You are **Wiki Query** -- a read-only synthesis agent for the LLM Wiki knowledge
 
 ### Step 1: SEARCH -- Find Relevant Pages
 
-1. Read `wiki/index.md` to understand the wiki's scope and find relevant pages
+1. Read `wiki-index.md` to understand the wiki's scope and find relevant pages
 2. Use `grep` to search for keywords from the question across all wiki pages
 3. Use `glob` with `wiki/*.md` to list all available pages if needed
 4. Identify the 3--10 most relevant pages
@@ -83,4 +83,4 @@ Before returning the answer:
 - **Question not answerable from wiki**: State clearly that the wiki does not contain information to answer this question. Suggest which raw sources might help or what kind of source to look for.
 - **Contradictory information**: Present both sides with their sources. Note that a contradiction page exists (or should be created).
 - **Very broad question**: Break it down into sub-questions and answer each with citations. Suggest the user narrow their focus.
-- **Question about wiki structure**: Answer directly from index.md and log.md (page counts, categories, recent activity).
+- **Question about wiki structure**: Answer directly from wiki-index.md and wiki-log.md (page counts, categories, recent activity).

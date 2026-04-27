@@ -12,7 +12,7 @@ export const WikiWatcherPlugin: Plugin = async ({ directory }) => {
         args: {},
         async execute(_args, _ctx) {
           const rawDir = join(directory, "raw")
-          const indexPath = join(directory, "wiki", "index.md")
+          const indexPath = join(directory, "wiki-index.md")
 
           // Get all files in raw/ (exclude .gitkeep and hidden files)
           let rawFiles: string[] = []
@@ -29,12 +29,12 @@ export const WikiWatcherPlugin: Plugin = async ({ directory }) => {
             return "No source files in raw/. Drop documents there to get started."
           }
 
-          // Read wiki/index.md to find ingested sources
+          // Read wiki-index.md to find ingested sources
           let indexContent = ""
           try {
             indexContent = await readFile(indexPath, "utf-8")
           } catch {
-            // index.md doesn't exist or is empty — nothing ingested yet
+            // wiki-index.md doesn't exist or is empty — nothing ingested yet
           }
 
           // Check if the raw filename (without extension) appears as a wiki-link in the index

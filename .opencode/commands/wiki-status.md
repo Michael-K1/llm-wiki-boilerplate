@@ -5,7 +5,7 @@ agent: wiki-orchestrator
 
 Show the current status of the wiki.
 
-Read `wiki/index.md` and `wiki/log.md` directly (no delegation needed).
+Read `wiki-index.md` and `wiki-log.md` directly (no delegation needed).
 
 Report:
 - Total page count with breakdown by category (Sources, Entities, Concepts, Comparisons, Contradictions, Questions)
