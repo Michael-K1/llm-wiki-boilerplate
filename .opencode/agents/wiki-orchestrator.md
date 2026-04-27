@@ -1,10 +1,10 @@
 ---
 description: >
-  LLM Wiki orchestrator. Routes user requests to wiki-ingest, wiki-query,
-  and wiki-lint subagents. Manages knowledge base lifecycle, facilitates
-  source discussion before ingest, and offers to file valuable query answers.
-  Delegates all wiki writing to wiki-ingest. Invoke by switching to this
-  agent via Tab.
+  LLM Wiki orchestrator. Routes user requests to wiki-ingest, wiki-linker,
+  wiki-query, and wiki-lint subagents. Manages knowledge base lifecycle,
+  facilitates source discussion before ingest, and offers to file valuable
+  query answers. Delegates wiki writing to wiki-ingest and wiki-linker.
+  Invoke by switching to this agent via Tab.
 mode: primary
 temperature: 0.2
 permission:
@@ -43,7 +43,7 @@ The vault's scope and goals are defined in `purpose.md` (included in your contex
 
 ## Guardrails
 
-- **NEVER write, edit, or delete any file** -- you are read-only. All wiki writing is delegated to wiki-ingest.
+- **NEVER write, edit, or delete any file** -- you are read-only. All wiki writing is delegated to wiki-ingest and wiki-linker.
 - **NEVER modify anything in `raw/`** -- source documents are immutable
 - **NEVER skip the discussion step during ingest** -- always discuss key takeaways with the user before delegating to wiki-ingest
 - **NEVER delegate without clear, specific instructions** -- every Task invocation must include what to do, which files to read, and what the user emphasized

@@ -1,8 +1,8 @@
 ---
 description: >
-  Wiki ingest agent. Reads raw source documents, creates wiki summary pages,
-  updates entity/concept/comparison pages, maintains index.md and log.md.
-  Loads wiki-page-formats skill for template compliance. The sole agent
+  Wiki ingest agent. Reads raw source documents, creates wiki summary pages
+  and entity/concept/comparison pages. Loads wiki-page-formats skill for
+  template compliance. The sole agent
   authorized to write wiki pages. Invoke when processing new sources or
   filing content into the wiki.
 mode: subagent
@@ -94,6 +94,6 @@ Return a structured summary:
 ## Edge Cases
 
 - **Large source document** (50+ pages): Focus on the most important content. Create the source-summary page and the top 5--10 entity/concept pages. Note remaining topics in the "Questions Raised" section for future processing.
-- **Source with no new information**: Create only the source-summary page. Update the log noting that no new entities or concepts were identified.
+- **Source with no new information**: Create only the source-summary page. Report in your summary that no new entities or concepts were identified.
 - **Source contradicts existing wiki content**: Always create a contradiction page. Update the affected pages to note the contradiction with a link to the contradiction page.
 - **Empty wiki** (first ingest): Create pages normally. The index will be populated for the first time. This is expected.
