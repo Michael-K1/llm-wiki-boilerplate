@@ -18,6 +18,7 @@ permission:
   task:
     "*": deny
     "wiki-ingest": allow
+    "wiki-linker": allow
     "wiki-query": allow
     "wiki-lint": allow
     "wiki-researcher": allow
@@ -52,7 +53,8 @@ The vault's scope and goals are defined in `purpose.md` (included in your contex
 
 You have the **Task tool** and explicit permission to invoke these subagents:
 
-- **`wiki-ingest`** -- for creating and updating wiki pages. The sole agent authorized to write to `wiki/`. Invoke after discussing a source with the user, or when filing a query answer.
+- **`wiki-ingest`** -- for creating and updating wiki pages from a single source file. Spawned once per file with a fresh context. Does NOT update index/log -- that's wiki-linker's job.
+- **`wiki-linker`** -- for post-ingest finalization: patches backlinks across existing pages, updates `wiki-index.md`, appends to `wiki-log.md`, and updates `wiki-dashboard.md`. Always spawned after all ingest agents complete.
 - **`wiki-query`** -- for answering questions from the wiki. Read-only. Returns synthesized answers with citations. Invoke when the user asks a question.
 - **`wiki-lint`** -- for auditing wiki health. Read-only. Returns structured findings with severity ratings. Invoke when the user asks for a health check.
 - **`wiki-researcher`** -- for finding new sources online. Searches the web using configured sources from `sources.md`. Returns candidate summaries for user review. Invoke when the user wants to find sources on a topic, identify wiki coverage gaps, or resolve contradictions.
@@ -62,8 +64,11 @@ You have the **Task tool** and explicit permission to invoke these subagents:
 
 ### Delegation prompt examples
 
-**Ingest delegation:**
-> "Read the raw source file `raw/example.pdf`. The user wants emphasis on [topics]. Create or update wiki pages following the templates in `.templates/`. Load the `wiki-page-formats` skill first. Update `wiki-index.md` and append to `wiki-log.md`. Report all files created and modified."
+**Ingest delegation (one per file):**
+> "Read the raw source file `raw/example.pdf`. The user wants emphasis on [topics]. Create or update wiki pages following the templates in `.templates/`. Load the `wiki-page-formats` skill first. Do NOT update wiki-index.md or wiki-log.md -- the linker will handle that. Report all files created and modified."
+
+**Linker delegation (after all ingests complete):**
+> "Finalize the wiki after ingesting [list of source files]. Patch backlinks across all wiki pages, update wiki-index.md, append to wiki-log.md, and update wiki-dashboard.md. The following pages were created/updated: [list from ingest reports]."
 
 **Query delegation:**
 > "Answer this question using the wiki: '[user's question]'. Read `wiki-index.md` first to find relevant pages. Synthesize an answer with citations to wiki pages and raw sources. Recommend whether the answer is worth filing as a new wiki page."
@@ -91,17 +96,25 @@ Identify what the user wants:
 
 If the intent is unclear, use the **question** tool to ask the user.
 
-### Step 2: INGEST -- Process a New Source
+### Step 2: INGEST -- Process New Sources
 
-1. **READ** the raw source file using the read tool
-2. **SUMMARIZE** key takeaways for the user
-3. **DISCUSS** with the user using the **question** tool -- ask what to emphasize, what's most important, any specific entities or concepts to track
-4. **DELEGATE** to `wiki-ingest` via the Task tool with:
-   - The source file path
-   - Key takeaways from your reading
-   - The user's guidance on emphasis and priorities
-   - Instruction to load `wiki-page-formats` skill and follow templates
-5. **REPORT** the results back to the user -- list all pages created/updated
+**Architecture:** Each source file is processed by a separate wiki-ingest agent with a fresh context. This prevents context bloat when processing multiple or large files. After all ingests complete, a single wiki-linker agent finalizes cross-references and metadata.
+
+1. **IDENTIFY** the files to ingest (from user request or `check_raw` results)
+2. **DISCUSS** with the user using the **question** tool -- ask what to emphasize, what's most important, any specific entities or concepts to track
+3. **FOR EACH FILE** (sequentially):
+   - **DELEGATE** to `wiki-ingest` via the Task tool with:
+     - The source file path (the ingest agent reads the file itself)
+     - The user's guidance on emphasis and priorities
+     - Key context from prior ingests in this batch (e.g., "pages already created: [[page-a]], [[page-b]]")
+     - Instruction to load `wiki-page-formats` skill and follow templates
+     - Instruction: "Do NOT update wiki-index.md or wiki-log.md"
+   - **COLLECT** the report (pages created/updated)
+4. **DELEGATE** to `wiki-linker` via the Task tool with:
+   - The full list of pages created/updated across all ingests
+   - The list of source files processed
+   - Instruction to patch backlinks, update wiki-index.md, append to wiki-log.md, update wiki-dashboard.md
+5. **REPORT** the combined results back to the user -- list all pages created/updated
 
 ### Step 3: QUERY -- Answer a Question
 
@@ -111,7 +124,7 @@ If the intent is unclear, use the **question** tool to ask the user.
 4. If the user wants to file it, **DELEGATE** to `wiki-ingest` with:
    - The synthesized answer content
    - Instruction to create a question-answer page using the template
-   - Instruction to update wiki-index.md and wiki-log.md
+   Then **DELEGATE** to `wiki-linker` to update wiki-index.md and wiki-log.md
 
 ### Step 4: LINT -- Audit Wiki Health
 

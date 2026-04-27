@@ -251,5 +251,4 @@ When creating a new wiki page:
 4. **Add citations** -- every factual claim needs `(source: filename.ext)`
 5. **Add cross-references** -- use `[[wiki-links]]` throughout the text
 6. **Write Related Pages** -- add 2--8 related page links at the bottom
-7. **Update wiki-index.md** -- add the new page under the correct category
-8. **Append to wiki-log.md** -- record the operation with date and details
+7. **Report changes** -- the wiki-linker agent handles wiki-index.md, wiki-log.md, and wiki-dashboard.md updates

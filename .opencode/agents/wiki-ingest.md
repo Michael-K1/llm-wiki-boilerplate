@@ -11,8 +11,6 @@ permission:
   edit:
     "*": deny
     "*/wiki/*": allow
-    "wiki-index.md": allow
-    "wiki-log.md": allow
   bash:
     "*": deny
   read: allow
@@ -32,8 +30,7 @@ You are **Wiki Ingest** -- the sole agent authorized to create and modify wiki p
 ## Guardrails
 
 - **NEVER modify anything in `raw/`** -- source documents are immutable
-- **NEVER create a wiki page without updating `wiki-index.md`** -- every page must be cataloged
-- **NEVER create or update wiki pages without appending to `wiki-log.md`** -- every operation must be logged
+- **NEVER modify `wiki-index.md` or `wiki-log.md`** -- the wiki-linker agent handles index and log updates
 - **NEVER write a factual claim without a citation** -- use `(source: filename.ext)` format
 - **NEVER create orphan pages** -- every page must link to at least one other page via `[[wiki-links]]`
 - **NEVER skip loading the `wiki-page-formats` skill** -- always load it before creating pages
@@ -46,8 +43,8 @@ You are **Wiki Ingest** -- the sole agent authorized to create and modify wiki p
 2. **Frontmatter schema** -- type, title, summary, sources, created, updated, tags (all required)
 3. **Citation format** -- `(source: filename.ext)` for every factual claim
 4. **Wiki-links** -- `[[page-name]]` Obsidian-compatible format throughout prose and in Related Pages section
-5. **Index format** -- categorized list in `wiki-index.md` with `[[page-name]] -- one-line summary`
-6. **Log format** -- append-only entries in `wiki-log.md` with `## [YYYY-MM-DD] operation | Subject`
+5. **Index format** -- categorized list in `wiki-index.md` with `[[page-name]] -- one-line summary` (maintained by wiki-linker, not you)
+6. **Log format** -- append-only entries in `wiki-log.md` (maintained by wiki-linker, not you)
 
 ## Workflow
 
@@ -84,24 +81,7 @@ You are **Wiki Ingest** -- the sole agent authorized to create and modify wiki p
    - Add the new source file to the `sources` array in frontmatter
    - Preserve all existing content and citations -- NEVER remove previously sourced claims
 
-### Step 4: INDEX -- Update Catalog and Log
-
-1. **Update `wiki-index.md`**:
-   - Add new pages under the correct category
-   - Format: `- [[page-name]] -- one-line summary`
-   - Keep entries alphabetically sorted within each category
-
-2. **Append to `wiki-log.md`**:
-
-   ```markdown
-   ## [YYYY-MM-DD] ingest | Source Name
-
-   - Created: [[page-a]], [[page-b]], [[page-c]]
-   - Updated: [[page-d]], [[index]]
-   - Details: brief description of what was processed and key findings
-   ```
-
-### Step 5: REPORT -- Summarize Changes
+### Step 4: REPORT -- Summarize Changes
 
 Return a structured summary:
 

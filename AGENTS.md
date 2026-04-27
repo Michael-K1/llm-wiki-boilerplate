@@ -11,8 +11,9 @@ Read [[purpose]] for the scope, goals, and domain of this vault.
 
 - `raw/` — source documents. IMMUTABLE. Never modify, rename, or delete anything in this folder.
 - `wiki/` — LLM-maintained markdown pages. All pages created and updated by wiki-ingest agent only.
-- `wiki-index.md` — table of contents for the entire wiki (project root). Updated on every ingest operation.
-- `wiki-log.md` — append-only operation log (project root). Appended on every operation.
+- `wiki-index.md` — table of contents for the entire wiki (project root). Updated by wiki-linker after each ingest.
+- `wiki-log.md` — append-only operation log (project root). Updated by wiki-linker after each ingest.
+- `wiki-dashboard.md` — vault statistics and coverage analysis (project root). Updated by wiki-linker.
 - `.templates/` — page type templates. Read-only reference for agents when creating pages.
 - [[sources]] — user-configured research sources with priority tiers. Read by wiki-researcher.
 - `candidate/` — staging area for source candidates found by wiki-researcher. Review here before moving to `raw/`.
