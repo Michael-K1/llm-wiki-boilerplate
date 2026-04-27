@@ -6,7 +6,7 @@ sources:
   - "{{filename.ext}}"
 created: "{{YYYY-MM-DD}}"
 updated: "{{YYYY-MM-DD}}"
-tags: [question]
+tags: [question, "{{domain-tag}}", "{{topic-tag}}"]
 cssclass: wiki-question
 ---
 

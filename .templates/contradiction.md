@@ -7,7 +7,7 @@ sources:
   - "{{source-b.ext}}"
 created: "{{YYYY-MM-DD}}"
 updated: "{{YYYY-MM-DD}}"
-tags: [contradiction]
+tags: [contradiction, "{{domain-tag}}", "{{topic-tag}}"]
 status: unresolved
 cssclass: wiki-contradiction
 ---

@@ -6,7 +6,7 @@ sources:
   - "{{filename.ext}}"
 created: "{{YYYY-MM-DD}}"
 updated: "{{YYYY-MM-DD}}"
-tags: [entity]
+tags: [entity, "{{domain-tag}}", "{{topic-tag}}"]
 cssclass: wiki-entity
 ---
 

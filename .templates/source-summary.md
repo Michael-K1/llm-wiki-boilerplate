@@ -6,7 +6,7 @@ sources:
   - "{{filename.ext}}"
 created: "{{YYYY-MM-DD}}"
 updated: "{{YYYY-MM-DD}}"
-tags: [source]
+tags: [source, "{{topic-tag-1}}", "{{topic-tag-2}}"]
 cssclass: wiki-source
 ---
 

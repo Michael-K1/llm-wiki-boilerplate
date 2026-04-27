@@ -6,7 +6,7 @@ sources:
   - "{{filename.ext}}"
 created: "{{YYYY-MM-DD}}"
 updated: "{{YYYY-MM-DD}}"
-tags: [comparison]
+tags: [comparison, "{{domain-tag}}", "{{topic-tag}}"]
 cssclass: wiki-comparison
 ---
 

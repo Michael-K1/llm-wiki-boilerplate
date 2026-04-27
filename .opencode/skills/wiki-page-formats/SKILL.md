@@ -55,7 +55,7 @@ Every wiki page MUST include YAML frontmatter with these fields:
 | `sources` | array | Yes | List of raw source filenames this page draws from |
 | `created` | string | Yes | Creation date in `YYYY-MM-DD` format |
 | `updated` | string | Yes | Last update date in `YYYY-MM-DD` format |
-| `tags` | array | Yes | At least one tag matching the page type |
+| `tags` | array | Yes | First tag matches page type (e.g., `source`, `entity`), followed by content-descriptive tags (e.g., `aws`, `security`, `alpitronic`) |
 
 Additional fields by type:
 

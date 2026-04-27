@@ -21,7 +21,7 @@ Read [[purpose]] for the scope, goals, and domain of this vault.
 ## Citation Rules
 
 - Every factual claim MUST reference its source using the format: `(source: filename.ext)`
-- If two sources disagree, note the contradiction explicitly and create a contradiction page
+- If two sources disagree, note the contradiction explicitly and create a contradiction page. Present both claims equally regardless of source priority — do not editorialize about which is "right" without evidence
 - If a claim has no source, mark it as `[needs verification]`
 - Never present LLM-generated synthesis as if it were a primary source
 - When updating a page with new source material, add the new source to the Sources list

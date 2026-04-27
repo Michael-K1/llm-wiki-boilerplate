@@ -6,7 +6,7 @@ sources:
   - "{{filename.ext}}"
 created: "{{YYYY-MM-DD}}"
 updated: "{{YYYY-MM-DD}}"
-tags: [concept]
+tags: [concept, "{{domain-tag}}", "{{topic-tag}}"]
 cssclass: wiki-concept
 ---
 
